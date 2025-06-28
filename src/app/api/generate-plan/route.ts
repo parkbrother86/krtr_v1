@@ -45,8 +45,9 @@ export async function POST(req: NextRequest) {
             "category": "e.g., 'Restaurant', 'Cafe', 'Activity', 'Sightseeing'",
             "reason": "A short sentence explaining why this place fits the user's request.",
             "address": "The physical address of the place.",
-            "latitude": "The latitude of the place as a number. Crucial for map display.",
-            "longitude": "The longitude of the place as a number. Crucial for map display."
+            "address": "The full, physical address of the place.",
+            "latitude": "The latitude derived from the physical address. Must be a number.",
+            "longitude": "The longitude derived from the physical address. Must be a number."
         }
         ]
     }

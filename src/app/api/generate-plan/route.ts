@@ -24,37 +24,38 @@ export async function POST(req: NextRequest) {
     }
     
     // 2. Gemini 모델 선택 및 설정
-    // gemini-1.5-flash-latest는 빠르고 비용 효율적이며 무료 쿼터가 넉넉합니다.
     const model = genAI.getGenerativeModel({
       model: "gemini-1.5-flash-latest",
     });
 
-    // 3. AI에게 보낼 프롬프트 재구성 (Gemini는 시스템 프롬프트 대신 일반 프롬프트에 지시사항을 포함)
+    // 3. AI에게 보낼 프롬프트 수정 (한국어 우선 답변 및 좌표 정확도 개선 지시)
     const fullPrompt = `
-    You are a helpful trip planning assistant.
-    Based on the user's request below, generate a travel plan.
-    The output MUST be a JSON object with the exact following structure. Do not add any extra text or markdown formatting like \`\`\`json.
+      You are a helpful and friendly trip planning assistant who is an expert on Korea.
+      Your primary language for responses is Korean.
+      Based on the user's request below, generate a travel plan in KOREAN.
+      The output MUST be a JSON object with the exact following structure. Do not add any extra text or markdown formatting like \`\`\`json.
 
-    JSON Structure:
-    {
-        "planTitle": "A concise and catchy title for the trip plan.",
-        "summary": "A brief, engaging summary of the trip plan, written as if you are talking to a friend.",
+      JSON Structure:
+      {
+        "planTitle": "A concise and catchy title for the trip plan, in Korean. (e.g., '홍대 감성 카페와 맛집 투어')",
+        "summary": "A brief, engaging summary of the trip plan, written in a friendly tone in Korean. (e.g., '친구와 함께 홍대에서 보낼 완벽한 하루! 힙한 카페에서 커피 한잔하고, 맛있는 저녁을 즐겨보세요.')",
         "recommendations": [
-        {
-            "placeName": "Name of the recommended place.",
-            "category": "e.g., 'Restaurant', 'Cafe', 'Activity', 'Sightseeing'",
-            "reason": "A short sentence explaining why this place fits the user's request.",
-            "address": "The physical address of the place.",
-            "address": "The full, physical address of the place.",
+          {
+            "placeName": "Name of the recommended place, in Korean. (e.g., '어반플랜트')",
+            "category": "The category of the place in Korean. (e.g., '카페', '맛집', '명소', '액티비티')",
+            "reason": "A short sentence explaining why this place fits the user's request, in Korean.",
+            "address": "The full, physical address of the place, in Korean.",
             "latitude": "The latitude derived from the physical address. Must be a number.",
             "longitude": "The longitude derived from the physical address. Must be a number."
-        }
+          }
         ]
-    }
+      }
 
-    User's Request: "${userPrompt}"
+      User's Request: "${userPrompt}"
 
-      Provide 3-5 recommendations based on the user's request.
+      Please analyze the user's request and provide 3-5 recommendations.
+      If the user's request is in Korean, all text values in the JSON output MUST be in Korean.
+      If the user's request is in English but is about Korea, the output should still be in Korean.
     `;
 
     // 4. Google Gemini API 호출

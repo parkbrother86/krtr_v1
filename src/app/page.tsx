@@ -75,13 +75,3 @@ export default function HomePage() {
   );
 }
 
-// ...
-interface Recommendation {
-  placeName: string;
-  category: string;
-  reason: string;
-  address: string;
-  latitude: number;  // 추가
-  longitude: number; // 추가
-}
-// ...

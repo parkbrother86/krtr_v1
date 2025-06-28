@@ -71,7 +71,7 @@ export default function ResultsPage() {
                     </span>
                     <h3 className="text-xl font-bold text-gray-900">{item.placeName}</h3>
                   </div>
-                  <p className="text-gray-600 mb-3">"{item.reason}"</p>
+                  <p className='text-gray-600 mb-3'>"{item.reason.replace(/"/g, '')}"</p>
                   <p className="text-sm text-gray-500">📍 {item.address}</p>
                 </div>
               ))}
